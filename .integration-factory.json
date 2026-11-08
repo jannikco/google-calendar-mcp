@@ -1,331 +1,64 @@
 {
   "schemaVersion": 1,
+  "id": "google-calendar-mcp",
+  "kind": "provider-connector",
+  "product": "pipmcp",
+  "title": "Google Calendar MCP server",
+  "description": "Use Google Calendar with AI agents through one PipMCP API key, actual hosted schemas and governed execution.",
   "status": "ready",
   "verification": "mock-only",
   "releaseEligible": true,
+  "operationIds": [],
   "maintainer": "jannikco",
   "license": "MIT",
-  "sourceRevision": "c7f5855bc814987bdc14bf505cdfc86af5ed24cf00ecf6f20258eba53109c8be",
+  "attributionSlug": "github-google-calendar-mcp",
+  "sourceRevision": "56d5a93fd9f464f89f0791b7c11d9811651dbfd480fcc83ff03c870fcf448e48",
+  "qualityVersion": 2,
+  "artifactType": "connector",
   "evidence": [
-    "Actual tools/call and direct-provider request contract tests"
+    "Gateway HTTP transport fixtures",
+    "Generated stdio wrapper discovery/call fixtures"
   ],
   "provenance": [
     "https://developers.google.com/workspace/calendar/api/v3/reference/events/list",
     "https://developers.google.com/identity/protocols/oauth2/native-app",
     "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/list"
   ],
-  "id": "google-calendar-mcp",
-  "kind": "provider-connector",
-  "product": "pipmcp",
-  "title": "Google Calendar MCP server",
-  "description": "Choose an accessible calendar and read upcoming events to prepare the day’s agenda.",
-  "operationIds": [
-    "list_calendars",
-    "list_events"
-  ],
+  "utility": {
+    "problem": "Choose an accessible calendar and read upcoming events to prepare the day’s agenda.",
+    "output": "Actual hosted tool schemas and durable governed execution receipts"
+  },
   "appSlug": "google-calendar",
   "appName": "Google Calendar",
-  "providerDocs": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
-  "providerWebsite": "https://calendar.google.com/",
-  "authentication": {
-    "type": "oauth2_authorization_code",
-    "requiredCredentialFields": [
-      "client_id",
-      "client_secret",
-      "owner_authorization"
-    ],
-    "settings": {
-      "scopes": "https://www.googleapis.com/auth/calendar",
-      "authorization_url": "https://accounts.google.com/o/oauth2/auth",
-      "token_url": "https://oauth2.googleapis.com/token"
-    },
-    "requiredHeaderNames": [],
-    "helpUrl": "https://developers.google.com/workspace/guides/create-credentials",
-    "tenantRequired": false,
-    "accountParameterNames": []
-  },
-  "attributionSlug": "github-google-calendar-mcp",
-  "artifactType": "connector",
-  "qualityVersion": 2,
   "connectorId": "google-calendar",
-  "connector": {
-    "id": "google-calendar",
-    "name": "Google Calendar",
-    "version": "0.2.0",
-    "baseUrl": "https://www.googleapis.com/calendar/v3",
-    "auth": {
-      "type": "oauth-access-token",
-      "env": "GOOGLE_CALENDAR_ACCESS_TOKEN"
-    },
-    "tools": [
-      {
-        "name": "list_calendars",
-        "description": "List calendars visible to the authorized Google user.",
-        "method": "GET",
-        "path": "/users/me/calendarList",
-        "readOnly": true,
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "maxResults": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 250
-            },
-            "pageToken": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 512,
-              "description": "Identifier"
-            }
-          },
-          "required": [],
-          "additionalProperties": false
-        },
-        "bindings": {
-          "path": [],
-          "query": {
-            "maxResults": "maxResults",
-            "pageToken": "pageToken"
-          },
-          "body": {}
-        },
-        "sampleArguments": {},
-        "provenance": [
-          "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/list"
-        ],
-        "pagination": {
-          "type": "cursor",
-          "cursorInput": "pageToken",
-          "nextCursorPath": "nextPageToken"
-        }
-      },
-      {
-        "name": "list_events",
-        "description": "Read events from an authorized calendar. Use primary for the user’s primary calendar.",
-        "method": "GET",
-        "path": "/calendars/{calendarId}/events",
-        "readOnly": true,
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "calendarId": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 512,
-              "description": "Identifier"
-            },
-            "maxResults": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 2500
-            },
-            "pageToken": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 512,
-              "description": "Identifier"
-            },
-            "timeMin": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "singleEvents": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "calendarId"
-          ],
-          "additionalProperties": false
-        },
-        "bindings": {
-          "path": [
-            "calendarId"
-          ],
-          "query": {
-            "maxResults": "maxResults",
-            "pageToken": "pageToken",
-            "timeMin": "timeMin",
-            "singleEvents": "singleEvents"
-          },
-          "body": {}
-        },
-        "sampleArguments": {
-          "calendarId": "primary",
-          "maxResults": 10
-        },
-        "provenance": [
-          "https://developers.google.com/workspace/calendar/api/v3/reference/events/list"
-        ],
-        "pagination": {
-          "type": "cursor",
-          "cursorInput": "pageToken",
-          "nextCursorPath": "nextPageToken"
-        }
-      }
-    ],
-    "workflow": {
-      "name": "Daily calendar briefing",
-      "description": "Choose an accessible calendar and read upcoming events to prepare the day’s agenda.",
-      "steps": [
-        "list_calendars",
-        "list_events"
-      ]
-    },
-    "provenance": [
-      "https://developers.google.com/workspace/calendar/api/v3/reference/events/list",
-      "https://developers.google.com/identity/protocols/oauth2/native-app",
-      "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/list"
-    ],
-    "verification": "mock-only",
-    "providerLiveValidation": "not-run",
-    "capabilityEvidence": {
-      "local": {
-        "level": "Tested",
-        "operations": [
-          {
-            "name": "list_calendars",
-            "level": "Tested",
-            "evidenceRefs": [
-              "Provider request/stdio contract tests"
-            ],
-            "method": "contract-fixture"
-          },
-          {
-            "name": "list_events",
-            "level": "Tested",
-            "evidenceRefs": [
-              "Provider request/stdio contract tests"
-            ],
-            "method": "contract-fixture"
-          }
-        ],
-        "evidenceRefs": [
-          "Provider request/stdio contract tests"
-        ],
-        "mode": "local"
-      },
-      "managed": {
-        "level": "Documented",
-        "operations": [
-          {
-            "name": "list_calendars",
-            "level": "Documented",
-            "evidenceRefs": [],
-            "method": "documentation"
-          },
-          {
-            "name": "list_events",
-            "level": "Documented",
-            "evidenceRefs": [],
-            "method": "documentation"
-          }
-        ],
-        "evidenceRefs": [],
-        "mode": "managed"
-      }
-    },
-    "requiredScopes": [
-      "https://www.googleapis.com/auth/calendar.readonly"
-    ],
-    "oauth": {
-      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
-      "tokenUrl": "https://oauth2.googleapis.com/token",
-      "pkce": true,
-      "redirectPort": 42813,
-      "authorizationParams": {
-        "access_type": "offline",
-        "prompt": "consent"
-      },
-      "clientIdEnv": "GOOGLE_CALENDAR_CLIENT_ID",
-      "clientSecretEnv": "GOOGLE_CALENDAR_CLIENT_SECRET",
-      "scopeEnv": "GOOGLE_CALENDAR_OAUTH_SCOPES",
-      "scopes": [
-        "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
-        "https://www.googleapis.com/auth/calendar.events.readonly"
-      ]
-    },
-    "setup": {
-      "instructions": "Enable Google Calendar API and create your own Desktop OAuth client. Set GOOGLE_CALENDAR_CLIENT_ID; optionally set GOOGLE_CALENDAR_CLIENT_SECRET if supplied by your client configuration. Native loopback callback is http://127.0.0.1:42813/callback. Default scopes permit calendar-list and event reads only. No PipMCP account is needed."
-    },
-    "repoId": "google-calendar-mcp",
-    "appSlug": "google-calendar",
-    "product": "pipmcp",
-    "artifactType": "connector",
-    "sourceRevision": "c7f5855bc814987bdc14bf505cdfc86af5ed24cf00ecf6f20258eba53109c8be",
-    "authentication": {
-      "type": "oauth2_authorization_code",
-      "requiredCredentialFields": [
-        "client_id",
-        "client_secret",
-        "owner_authorization"
-      ],
-      "settings": {
-        "scopes": "https://www.googleapis.com/auth/calendar",
-        "authorization_url": "https://accounts.google.com/o/oauth2/auth",
-        "token_url": "https://oauth2.googleapis.com/token"
-      },
-      "requiredHeaderNames": [],
-      "helpUrl": "https://developers.google.com/workspace/guides/create-credentials",
-      "tenantRequired": false,
-      "accountParameterNames": []
-    },
-    "managedAvailability": {
-      "status": "listed",
-      "checkedAt": "2026-11-08T12:29:10.433747+00:00"
-    }
-  },
+  "executionAuthority": "pipmcp-gateway",
+  "version": "1.0.0",
+  "agentReady": true,
   "capabilityEvidence": {
     "local": {
       "level": "Tested",
       "operations": [
         {
-          "name": "list_calendars",
+          "name": "gateway_transport",
           "level": "Tested",
+          "method": "contract-fixture",
           "evidenceRefs": [
-            "Provider request/stdio contract tests"
-          ],
-          "method": "contract-fixture"
-        },
-        {
-          "name": "list_events",
-          "level": "Tested",
-          "evidenceRefs": [
-            "Provider request/stdio contract tests"
-          ],
-          "method": "contract-fixture"
+            "Generated gateway/stdio fixtures"
+          ]
         }
       ],
       "evidenceRefs": [
-        "Provider request/stdio contract tests"
+        "Generated gateway/stdio fixtures"
       ],
       "mode": "local"
     },
     "managed": {
       "level": "Documented",
-      "operations": [
-        {
-          "name": "list_calendars",
-          "level": "Documented",
-          "evidenceRefs": [],
-          "method": "documentation"
-        },
-        {
-          "name": "list_events",
-          "level": "Documented",
-          "evidenceRefs": [],
-          "method": "documentation"
-        }
-      ],
+      "operations": [],
       "evidenceRefs": [],
       "mode": "managed"
     }
   },
-  "utility": {
-    "problem": "Choose an accessible calendar and read upcoming events to prepare the day’s agenda.",
-    "output": "Actual provider API results through local MCP tools"
-  },
   "factory": "leadadapter-pipmcp",
-  "generatorVersion": 2
+  "generatorVersion": 3
 }

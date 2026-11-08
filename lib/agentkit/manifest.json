@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "product": "pipmcp",
+  "credential": "PIPMCP_API_KEY",
+  "skills": [
+    {
+      "name": "pipmcp-google-calendar",
+      "description": "Connect AI agents to Google Calendar using one PipMCP API key and actual hosted tool discovery."
+    }
+  ],
+  "files": {
+    "skills/pipmcp-google-calendar/SKILL.md": "5ad17bb8cb9d5588e19dc77a542f71b77d6b6aac17b1ae10dab9b3a8ec4e3761"
+  }
+}
