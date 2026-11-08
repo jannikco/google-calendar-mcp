@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "status": "ready",
+  "verification": "mock-only",
+  "releaseEligible": true,
+  "maintainer": "jannikco",
+  "license": "MIT",
+  "sourceRevision": "c76493ed0353fc7fefeba9ce8fcf553be2c32e23eb9c60b02b4b65789d11661a",
+  "evidence": [
+    "Source-backed provider setup metadata",
+    "Offline configuration and MCP protocol tests"
+  ],
+  "provenance": [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+  ],
+  "id": "google-calendar-mcp",
+  "kind": "mcp-setup",
+  "product": "pipmcp",
+  "title": "Google Calendar MCP setup and connection checker",
+  "description": "Generate Google Calendar MCP client configuration, inspect available tools and validate hosted endpoint access through PipMCP.",
+  "operationIds": [],
+  "appSlug": "google-calendar",
+  "appName": "Google Calendar",
+  "providerDocs": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+  "providerWebsite": "https://calendar.google.com/",
+  "authentication": {
+    "type": "oauth2_authorization_code",
+    "requiredCredentialFields": [
+      "client_id",
+      "client_secret",
+      "owner_authorization"
+    ],
+    "requiredHeaderNames": [],
+    "helpUrl": "https://developers.google.com/workspace/guides/create-credentials",
+    "tenantRequired": false,
+    "accountParameterNames": []
+  },
+  "attributionSlug": "github-google-calendar-mcp"
+}
