@@ -1,51 +1,69 @@
-# Google Calendar MCP setup and connection checker
+# Google Calendar MCP server
 
-Generate Google Calendar MCP client configuration, inspect available tools and validate hosted endpoint access through PipMCP.
+Choose an accessible calendar and read upcoming events to prepare the day’s agenda.
 
-Maintainer: jannikco · License: MIT · Verification: **mock-only**
+A direct-provider MCP server with useful local execution. No PipMCP account is required for local use. Provider API access and any provider charges are your responsibility.
 
 ## Quick start
 
-Requires Node.js 22 or later.
+Requires Node.js22+. Clone this repository, then run:
 
 ```sh
-npm ci
+npm ci --ignore-scripts
 npm test
 npm start
 ```
 
-The default example runs locally without credentials and makes no external changes. Verification status describes recorded evidence; local configuration tests do not establish that provider authentication or execution works.
+The default command inspects the tools offline. Configure your own credentials in your environment:
 
-## Connect google-calendar
+- `GOOGLE_CALENDAR_ACCESS_TOKEN`
 
-[Create or sign in to PipMCP](https://pipmcp.com/register?app=google-calendar&utm_source=github&utm_campaign=github-google-calendar-mcp) and select the integration. Connect your authorized provider account and copy its hosted MCP endpoint. Set PIPMCP_ENDPOINT and, if required, PIPMCP_TOKEN in your environment. Run npm start to produce client configuration; run npm start -- --live for a read-only connection check. Provider app presence is catalog evidence, not live verification.
+For local OAuth, use node local-auth/cli.mjs login ./connector.json with your own provider app; see AUTH.md. Your tokens remain in the native OS credential store.
 
-## Managed service
+Credential help: https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest
 
-[Continue with PipMCP](https://pipmcp.com/register?app=google-calendar&utm_source=github&utm_campaign=github-google-calendar-mcp). This repository is maintained by the integration team and does not imply endorsement by LinkedIn or other providers.
+## Execute a real read
 
-## Provenance and support
+Replace example record IDs with records you are authorized to access.
 
-Source revision: c76493ed0353fc7fefeba9ce8fcf553be2c32e23eb9c60b02b4b65789d11661a. The complete manifest is in integration.json; SHA256SUMS covers the reviewed artifact. Open a repository issue without credentials or personal data. See SECURITY.md for sensitive reports. No telemetry is sent by this code; signup links include explicit campaign parameters.
-
-## Provider setup inventory
-
-Run `npm start -- --setup` to inspect this app's recorded authentication requirements and setup links offline. Credentials are entered in PipMCP; this repository lists required field names only.
-
-```json
-{
-  "type": "oauth2_authorization_code",
-  "requiredCredentialFields": [
-    "client_id",
-    "client_secret",
-    "owner_authorization"
-  ],
-  "requiredHeaderNames": [],
-  "helpUrl": "https://developers.google.com/workspace/guides/create-credentials",
-  "tenantRequired": false,
-  "accountParameterNames": []
-}
+```sh
+npm start -- --call list_calendars '{}'
 ```
 
-Provider documentation: https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest
-Provider website: https://calendar.google.com/
+## Use with an MCP client
+
+Launch `node /absolute/path/google-calendar-mcp/server.mjs` using stdio transport; pass credentials through the client environment. Stdout is reserved for JSON-RPC.
+
+## Tools
+
+| Tool | Effect | Purpose |
+| --- | --- | --- |
+| list_calendars | Read | List calendars visible to the authorized Google user. |
+| list_events | Read | Read events from an authorized calendar. Use primary for the user’s primary calendar. |
+
+## Concrete workflow
+
+Choose an accessible calendar and read upcoming events to prepare the day’s agenda.
+
+1. list_calendars
+2. list_events
+
+## Optional writes
+
+Writes are disabled by default. Set CONNECTOR_ALLOW_WRITES=true and supply `_approval: {approved:true,idempotencyKey:"unique-request-id"}` on the specific call. Do not reuse a key for a different request. Uncertain outcomes are never automatically replayed; inspect the provider before another attempt.
+
+## Capability evidence
+
+Local: **Tested — HTTP fixtures and real stdio tools/call**. Managed: **Documented**. Provider authentication and live operations have not been established by these fixture tests. Evidence applies per operation and execution mode; setup discovery does not imply provider execution.
+
+## Managed production
+
+[Activate with PipMCP](https://pipmcp.com/github/start?app=google-calendar&integration=google-calendar-mcp&utm_source=github&utm_campaign=github-google-calendar-mcp&utm_content=readme) when you want the hosted service.  Local credentials are not uploaded by this code. Review provider permissions in the managed onboarding. [Directory and related projects](https://jannikco.github.io/pipmcp-connectors/integrations/google-calendar/).
+
+## Provenance and maintenance
+
+- https://developers.google.com/workspace/calendar/api/v3/reference/events/list
+- https://developers.google.com/identity/protocols/oauth2/native-app
+- https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/list
+
+Maintainer:jannikco. MIT license for this code. See connector.json for selected operations and integration.json for evidence. Runtime dependencies retain their own licenses. Report sensitive issues through https://pipmcp.com/contact; do not post credentials or customer data in public issues.

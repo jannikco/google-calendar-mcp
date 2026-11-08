@@ -1,0 +1,211 @@
+{
+  "id": "google-calendar",
+  "name": "Google Calendar",
+  "version": "0.2.0",
+  "baseUrl": "https://www.googleapis.com/calendar/v3",
+  "auth": {
+    "type": "oauth-access-token",
+    "env": "GOOGLE_CALENDAR_ACCESS_TOKEN"
+  },
+  "tools": [
+    {
+      "name": "list_calendars",
+      "description": "List calendars visible to the authorized Google user.",
+      "method": "GET",
+      "path": "/users/me/calendarList",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "maxResults": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 250
+          },
+          "pageToken": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "description": "Identifier"
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "bindings": {
+        "path": [],
+        "query": {
+          "maxResults": "maxResults",
+          "pageToken": "pageToken"
+        },
+        "body": {}
+      },
+      "sampleArguments": {},
+      "provenance": [
+        "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/list"
+      ],
+      "pagination": {
+        "type": "cursor",
+        "cursorInput": "pageToken",
+        "nextCursorPath": "nextPageToken"
+      }
+    },
+    {
+      "name": "list_events",
+      "description": "Read events from an authorized calendar. Use primary for the user’s primary calendar.",
+      "method": "GET",
+      "path": "/calendars/{calendarId}/events",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "calendarId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "description": "Identifier"
+          },
+          "maxResults": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2500
+          },
+          "pageToken": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "description": "Identifier"
+          },
+          "timeMin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "singleEvents": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "calendarId"
+        ],
+        "additionalProperties": false
+      },
+      "bindings": {
+        "path": [
+          "calendarId"
+        ],
+        "query": {
+          "maxResults": "maxResults",
+          "pageToken": "pageToken",
+          "timeMin": "timeMin",
+          "singleEvents": "singleEvents"
+        },
+        "body": {}
+      },
+      "sampleArguments": {
+        "calendarId": "primary",
+        "maxResults": 10
+      },
+      "provenance": [
+        "https://developers.google.com/workspace/calendar/api/v3/reference/events/list"
+      ],
+      "pagination": {
+        "type": "cursor",
+        "cursorInput": "pageToken",
+        "nextCursorPath": "nextPageToken"
+      }
+    }
+  ],
+  "workflow": {
+    "name": "Daily calendar briefing",
+    "description": "Choose an accessible calendar and read upcoming events to prepare the day’s agenda.",
+    "steps": [
+      "list_calendars",
+      "list_events"
+    ]
+  },
+  "provenance": [
+    "https://developers.google.com/workspace/calendar/api/v3/reference/events/list",
+    "https://developers.google.com/identity/protocols/oauth2/native-app",
+    "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/list"
+  ],
+  "verification": "mock-only",
+  "providerLiveValidation": "not-run",
+  "capabilityEvidence": {
+    "local": {
+      "level": "Tested",
+      "operations": [
+        {
+          "name": "list_calendars",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        },
+        {
+          "name": "list_events",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        }
+      ],
+      "evidenceRefs": [
+        "Provider request/stdio contract tests"
+      ],
+      "mode": "local"
+    },
+    "managed": {
+      "level": "Documented",
+      "operations": [
+        {
+          "name": "list_calendars",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        },
+        {
+          "name": "list_events",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        }
+      ],
+      "evidenceRefs": [],
+      "mode": "managed"
+    }
+  },
+  "requiredScopes": [
+    "https://www.googleapis.com/auth/calendar.readonly"
+  ],
+  "oauth": {
+    "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+    "tokenUrl": "https://oauth2.googleapis.com/token",
+    "pkce": true,
+    "redirectPort": 42813,
+    "authorizationParams": {
+      "access_type": "offline",
+      "prompt": "consent"
+    },
+    "clientIdEnv": "GOOGLE_CALENDAR_CLIENT_ID",
+    "clientSecretEnv": "GOOGLE_CALENDAR_CLIENT_SECRET",
+    "scopeEnv": "GOOGLE_CALENDAR_OAUTH_SCOPES",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
+      "https://www.googleapis.com/auth/calendar.events.readonly"
+    ]
+  },
+  "setup": {
+    "instructions": "Enable Google Calendar API and create your own Desktop OAuth client. Set GOOGLE_CALENDAR_CLIENT_ID; optionally set GOOGLE_CALENDAR_CLIENT_SECRET if supplied by your client configuration. Native loopback callback is http://127.0.0.1:42813/callback. Default scopes permit calendar-list and event reads only. No PipMCP account is needed."
+  },
+  "repoId": "google-calendar-mcp",
+  "appSlug": "google-calendar",
+  "product": "pipmcp",
+  "artifactType": "connector",
+  "sourceRevision": "c7f5855bc814987bdc14bf505cdfc86af5ed24cf00ecf6f20258eba53109c8be",
+  "managedAvailability": {
+    "status": "listed",
+    "checkedAt": "2026-11-08T12:29:10.433747+00:00"
+  }
+}
