@@ -12,7 +12,7 @@
   "maintainer": "jannikco",
   "license": "MIT",
   "attributionSlug": "github-google-calendar-mcp",
-  "sourceRevision": "56d5a93fd9f464f89f0791b7c11d9811651dbfd480fcc83ff03c870fcf448e48",
+  "sourceRevision": "865de73b91e4183e369c90743e46f42aa128483298e34e5bfa3e2775a4ffbdca",
   "qualityVersion": 2,
   "artifactType": "connector",
   "evidence": [
@@ -32,7 +32,7 @@
   "appName": "Google Calendar",
   "connectorId": "google-calendar",
   "executionAuthority": "pipmcp-gateway",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "agentReady": true,
   "capabilityEvidence": {
     "local": {

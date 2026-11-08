@@ -1,0 +1,57 @@
+{
+  "id": "meeting-conflict-review",
+  "repositoryId": "google-calendar-mcp",
+  "product": "pipmcp",
+  "connectorId": "google-calendar",
+  "title": "Review calendar conflicts",
+  "promise": "Summarize overlapping meetings before proposing schedule changes.",
+  "sourceRevision": "865de73b91e4183e369c90743e46f42aa128483298e34e5bfa3e2775a4ffbdca",
+  "credential": "PIPMCP_API_KEY",
+  "transport": "pipmcp-gateway",
+  "sourceRefs": [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+  ],
+  "readTask": {
+    "intent": "Summarize overlapping meetings before proposing schedule changes.",
+    "requiredCapability": "Read-only authorized account data; discover actual names and schemas first"
+  },
+  "synthetic": {
+    "strategy": "equals",
+    "field": "hasConflict",
+    "value": true,
+    "records": [
+      {
+        "id": "synthetic-event-a",
+        "start": "2026-11-09T10:00:00Z",
+        "end": "2026-11-09T11:00:00Z"
+      },
+      {
+        "id": "synthetic-event-b",
+        "start": "2026-11-09T10:30:00Z",
+        "end": "2026-11-09T11:30:00Z"
+      },
+      {
+        "id": "synthetic-event-c",
+        "start": "2026-11-09T14:00:00Z",
+        "end": "2026-11-09T15:00:00Z"
+      }
+    ],
+    "input": {
+      "limit": 10
+    },
+    "normalization": "Invented normalized review fields demonstrate task logic; live provider schemas and field mappings must be reviewed separately.",
+    "expectedReviewCount": 2,
+    "asOf": "2026-11-08T00:00:00Z",
+    "normalize": {
+      "type": "calendar-conflicts"
+    }
+  },
+  "livePolicy": {
+    "default": "preflight-only",
+    "explicitReadSelectionRequired": true,
+    "providerWritesAllowed": false,
+    "sandboxWritesRequireSeparateApproval": true
+  },
+  "baseSourceRevision": "56d5a93fd9f464f89f0791b7c11d9811651dbfd480fcc83ff03c870fcf448e48",
+  "releaseVersion": "1.1.0"
+}
